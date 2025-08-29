@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bottom Nav • Mobile</title>
+    <link rel="stylesheet" href="css/bottom-nav.css">
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        header {
+            width: 100%;
+            height: 70px;
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <header></header>
+    <main>
+
+    </main>
+    <nav class="navigation" aria-label="Navegação principal">
+        <ul>
+            <li class="list active">
+                <a href="#marcas" aria-current="page">
+                    <span class="icon"><ion-icon name="home-outline"></ion-icon></span>
+                    <span class="text">Marcas</span>
+                </a>
+            </li>
+            <li class="list">
+                <a href="#produtos">
+                    <span class="icon"><ion-icon name="storefront-outline"></ion-icon></span>
+                    <span class="text">Produtos</span>
+                </a>
+            </li>
+            <li class="list">
+                <a href="#carrinho">
+                    <span class="icon"><ion-icon name="bag-add-outline"></ion-icon></span>
+                    <span class="text">Carrinho</span>
+                </a>
+            </li>
+            <li class="list">
+                <a href="#propostas">
+                    <span class="icon"><ion-icon name="create-outline"></ion-icon></span>
+                    <span class="text">Propostas</span>
+                </a>
+            </li>
+            <li class="list">
+                <a href="#pedidos">
+                    <span class="icon"><ion-icon name="bag-check-outline"></ion-icon></span>
+                    <span class="text">Pedidos</span>
+                </a>
+            </li>
+
+            <div class="indicator" aria-hidden="true"></div>
+        </ul>
+    </nav>
+
+    <!-- Ionicons: use module + fallback (não duplique) -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        const nav = document.querySelector('.navigation');
+        const items = nav.querySelectorAll('.list');
+        const main = document.querySelector('main');
+
+        nav.style.setProperty('--items', items.length);
+
+        const routes = [
+            { hash: '#marcas', file: 'main/marcas.html' },
+            { hash: '#produtos', file: 'main/produtos.html' },
+            { hash: '#carrinho', file: 'main/carrinho.html' },
+            { hash: '#propostas', file: 'main/propostas.html' },
+            { hash: '#pedidos', file: 'main/pedidos.html' }
+        ];
+
+        // Troca a aba ativa e o conteúdo do main
+        function setActive(index) {
+            items.forEach(li => li.classList.remove('active'));
+            items[index].classList.add('active');
+            nav.style.setProperty('--i', index);
+
+            // Troca o conteúdo do main
+            fetch(routes[index].file)
+                .then(res => res.text())
+                .then(html => {
+                    // Pega só o conteúdo do <main> do arquivo carregado
+                    const temp = document.createElement('div');
+                    temp.innerHTML = html;
+                    const novoMain = temp.querySelector('main');
+                    if (novoMain) main.innerHTML = novoMain.innerHTML;
+                });
+        }
+
+        // Para suportar navegação pelo hash na URL
+        function navigateByHash() {
+            const idx = routes.findIndex(r => r.hash === location.hash);
+            setActive(idx >= 0 ? idx : 0);
+        }
+
+        // Click/touch nos botões da barra
+        items.forEach((li, idx) => {
+            li.querySelector('a').addEventListener('click', e => {
+                e.preventDefault();
+                window.location.hash = routes[idx].hash;
+            });
+        });
+
+        // Troca ao mudar o hash
+        window.addEventListener('hashchange', navigateByHash);
+
+        // Carrega a primeira aba ao entrar
+        navigateByHash();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Janela Raio-X</title>
+<style>
+  .pai{
+    background:#222; color:#fff; padding:16px; border-radius:8px; height:160px;
+    font:14px/1.4 system-ui, sans-serif; position:relative; overflow:hidden;
+  }
+  .meio{
+    background:blue; height:80px;  position:absolute; border-radius:6px;top: 0;
+  }
+  .filho{
+    /* a “janela” */
+    width:240px; height:56px; margin:12px; border:2px dashed #7fd; border-radius:6px;
+    position:relative; overflow:hidden; /* recorta o conteúdo clonado */
+  }
+  /* conteúdo clonado que espelha o pai dentro da janela */
+  .filho > .espelho{
+    position:absolute; top:0; left:0; pointer-events:none; /* não intercepta cliques */
+  }
+</style>
+</head>
+<body>
+  <div class="pai" id="pai">
+    Texto do PAI aqui, inclusive <strong>trechos no meio</strong> que devem aparecer na janela,
+    exatamente nas mesmas posições.
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, molestiae id aperiam unde quae, obcaecati vel fugiat animi quisquam voluptatibus eveniet ducimus ipsam totam facere adipisci quis, iste at repellendus.
+    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab sit dolores porro excepturi fugiat mollitia provident sed quos quaerat blanditiis minima explicabo suscipit corporis non modi ut sequi, aliquid dolore.
+    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet vero pariatur qui consequatur aliquid praesentium, voluptatibus harum similique veritatis illum minus exercitationem placeat aut tenetur accusamus a. Pariatur, nostrum cupiditate?
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi hic placeat aperiam aspernatur facere accusamus commodi fugit quis fuga voluptates sequi illum culpa maxime, fugiat numquam eum quibusdam voluptatem earum.
+    <div class="meio">
+      <div class="filho" id="janela"></div>
+    </div>
+  </div>
+
+<script>
+  const pai = document.getElementById('pai');
+  const janela = document.getElementById('janela');
+
+  // Clona todo o conteúdo do pai
+  const clone = pai.cloneNode(true);
+  clone.classList.add('espelho');
+  clone.setAttribute('aria-hidden', 'true');   // evita leitura duplicada por leitor de tela
+  clone.removeAttribute('id');                 // não duplicar id
+
+  // Evita clonar a própria faixa azul e a própria janela (para não repetir infinitamente)
+  clone.querySelector('.meio')?.remove();
+
+  janela.appendChild(clone);
+
+  function alinhar(){
+    const pr = pai.getBoundingClientRect();
+    const jr = janela.getBoundingClientRect();
+    // desloca o clone negativamente para alinhar as coordenadas do pai com a janela
+    const dx = jr.left - pr.left;
+    const dy = jr.top  - pr.top;
+    clone.style.transform = `translate(${-dx}px, ${-dy}px)`;
+    clone.style.width  = pr.width + 'px';
+    clone.style.height = pr.height + 'px';
+  }
+
+  // Alinha no load, resize e quando o conteúdo do pai mudar
+  window.addEventListener('resize', alinhar);
+  new MutationObserver(alinhar).observe(pai, {subtree:true, childList:true, characterData:true});
+  requestAnimationFrame(alinhar);
+</script>
+</body>
+</html>

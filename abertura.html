@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grupo SHELF</title>
+    <link rel="shortcut icon" href="img/logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1e3d1a;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .logo-img {
+            width: 120px;
+            height: auto;
+            animation: pop 1s ease-out forwards;
+            transform: scale(0.7) rotate(-10deg);
+            opacity: 0;
+        }
+
+        @keyframes pop {
+            to {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+
+        .logo-text {
+            color: #ffffff;
+            animation: slideIn 1s ease-out 0.5s forwards;
+            transform: translateX(20px);
+            opacity: 0;
+        }
+
+        @keyframes slideIn {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .logo-text h1 {
+            font-size: 36px;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .logo-text span {
+            font-size: 30px;
+            color: #cde8c9;
+            letter-spacing: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .logo-wrapper {
+                /* Removido flex-direction: column; para manter lado a lado no celular */
+                text-align: center;
+                gap: 10px;
+                /* opcional: diminuir gap no mobile */
+            }
+
+            .logo-img {
+                width: 80px;
+                /* menor no mobile */
+            }
+
+            .logo-text h1 {
+                font-size: 30px;
+                margin: 0;
+            }
+
+            .logo-text span {
+                font-size: 28px;
+                letter-spacing: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logo-wrapper">
+        <img src="img/logo.png" alt="Grupo SHELF" class="logo-img" />
+        <div class="logo-text">
+            <h1>SHELF</h1>
+            <span>SHELF</span>
+        </div>
+    </div>
+      <script>
+    setTimeout(() => {
+      document.body.style.transition = 'opacity 0.5s ease';
+      document.body.style.opacity = 0;
+
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 500);
+
+    }, 2500);
+  </script>
+</body>
+
+</body>
+
+</html>
